@@ -4,8 +4,7 @@ import { bankOne } from "./data";
 
 
 function App() {
-  const [topLevel, setTopLevel] = useState(bankOne)
-  const [isPlaying, setIsPlaying] = useState('Q')
+  const [isPlaying, setIsPlaying] = useState('')
   const [audio, setAudio] = useState('')
   
   useEffect(() => {
@@ -25,15 +24,14 @@ function App() {
     <main>
       <Wrapper>
         <Container id='drum-machine'>
-          { topLevel.map((sound, index) => {
+          { bankOne.map((sound, index) => {
             const drumId = sound.keyTrigger
             if (drumId === isPlaying) {
               setIsPlaying('')
               setAudio(new Audio(`${sound.url}`))
             }
-          
             return (
-              <DrumPad 
+              <DrumPad
                 id={ drumId } 
                 key={index} 
                 onClick={ () => setIsPlaying(drumId) }
