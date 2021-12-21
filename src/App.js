@@ -6,6 +6,8 @@ import { bankOne } from "./data";
 function App() {
   const [topLevel, setTopLevel] = useState(bankOne)
   const [isPlaying, setIsPlaying] = useState('Q')
+  const [audio, setAudio] = useState('')
+  
   useEffect(() => {
     document.addEventListener('keydown', (e) => {
       const id = e.key.toUpperCase()
@@ -13,28 +15,29 @@ function App() {
     })
     return () => window.removeEventListener('keydown', setIsPlaying)
   }, [])
-  
+
+  if (audio) {
+    audio.play()
+    setAudio('')
+  }
+
   return (
     <main>
       <Wrapper>
         <Container id='drum-machine'>
           { topLevel.map((sound, index) => {
-            const audio = new Audio(`${sound.url}`)
             const drumId = sound.keyTrigger
-            const playSong = (id) => {
-              setIsPlaying(id)
-              audio.play()
-              setTimeout(() => {
-                setIsPlaying('')
-              }, 500);
+            if (drumId === isPlaying) {
+              setIsPlaying('')
+              setAudio(new Audio(`${sound.url}`))
             }
+          
             return (
               <DrumPad 
                 id={ drumId } 
                 key={index} 
-                onClick={ () => playSong(drumId) }
-                onKeyDown={(e) => console.log(e.target.value)}
-                className={ drumId == isPlaying && 'active' }
+                onClick={ () => setIsPlaying(drumId) }
+                className={ drumId }
               >
                 { sound.keyTrigger }
               </DrumPad>
